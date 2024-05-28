@@ -1,0 +1,29 @@
+<div class="modal fade editprofile" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <h3>Edit Profile</h3>
+        <hr>
+        <form style="padding: 20px;">
+            <div class="form-group">
+            <label for="formGroupExampleInput">Nickname</label>
+            <input type="text" class="form-control nickname" id="nickname" placeholder="Nickname" onkeyup="validate_nickname()">
+            <span class="nickname_error" id = "nickname_error" style="color: red;"></span>
+            </div>
+            <div class="form-group">
+            <label for="formGroupExampleInput2">Bio</label>
+            <input type="text" class="form-control bio" id="bio" placeholder="Bio" onkeyup="validate_bio()">
+            <span class="bio_error" id ="bio_error"  style="color: red;"></span>
+            </div>
+            <div class="form-group">
+            <label for="formGroupExampleInput2">Occupation</label>
+            <input type="text" class="form-control occupation" id="occupation" placeholder="Occupation" onkeyup="validate_occupation()">
+            <span class="occupation_error" id = "occupation_error" style="color: red;"></span>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" onclick="submit_profile(event)">Submit</button>
+            <span class="submit_error" id="submit_error" style="color: red;"></span>
+        </form>
+        </div>
+    </div>
+</div>
+{{!-- <script src="static/js/editprofile.js"></script> --}}

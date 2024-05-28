@@ -1,0 +1,22 @@
+.navbar{
+    background-color: black;
+}
+.nav-text{
+    color: white;
+}
+.active{
+    border-image: linear-gradient(#FF0000, #FFA500, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3) 30;
+    /* background: -webkit-linear-gradient(white); */
+    border-width: 3px;
+    border-style: solid;
+    /* background-color: black; */
+    /* border-radius: 50%; */
+}
+.looks{
+    color: white;
+    cursor:pointer;
+}
+.looks:hover{
+    background-color: white;
+    color: black;
+}

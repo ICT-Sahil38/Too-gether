@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-light ms-3 me-3">
+  <a class="navbar-brand disable" style="color: white; cursor:default"><b>TooGether</b></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background-color: rgb(0, 255, 47);">
+    <span class="&#9658;"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+    <ul class=" navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link me-2" id="home" style="color: white; cursor:pointer;">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link me-2" id="addpost" data-toggle="modal" data-target=".addPosts" style="color: white; cursor:pointer;">Add Post</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle me-2" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
+          More
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: black;">
+          <a class="dropdown-item looks">Saved</a>
+          <a class="dropdown-item looks" id="care">Care</a>
+          <div class="dropdown-divider" style="background-color: white;"></div>
+          <a class="dropdown-item looks" id="logout">Logout</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link me-2" id="profile" style="color: white; cursor:pointer;">Profile</a>
+      </li>
+      <form id="navbar_from"></form>
+    </ul>
+  </div>
+</nav>

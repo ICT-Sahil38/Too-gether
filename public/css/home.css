@@ -1,0 +1,30 @@
+body{
+    background-color: black;
+}
+/* .profile,.post{
+    border: 2px solid green;
+} */
+.scroll{
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+::-webkit-scrollbar{
+    display: none;
+}
+.comment{
+    background-color: black;
+    border-top: none;
+    border-left:none;
+    border-right:none;
+    color: white;
+}
+.comment_scroll{
+    height: 400px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.comment-model-input{
+    width: 380px;
+    height: 35px;
+    border: none;
+}

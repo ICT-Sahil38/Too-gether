@@ -1,0 +1,76 @@
+<html lang="en">
+<head> 
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/home.css">
+  <link rel="stylesheet" href="static/css/navbar.css">
+  <link rel="stylesheet" href="static/css/care.css">
+  <script src="static/js/care.js"></script>
+  {{!-- <script src="static/js/addpost.js"></script>
+  <script src="static/js/likes.js"></script>
+  <script src="static/js/comment.js"></script> --}}
+ <!-- Include jQuery and Toastr CSS and JS -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  {{!-- <script src="/static/js/add_member.js"></script> --}}
+
+  <title>Login</title> 
+ </head>
+ <body>
+    {{> navbar}}
+    <div class="container-fluid d-flex flex-column justify-content-center align-items-center vh-100" style="margin-top: -75px;">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-5 text-center p-3 me-3">
+                <h1>About</h1>
+                <p style="line-height: 1.8; font-size:medium">Yes, here at the step There are millions of beauties. We but this is of the heart. They have come to give gifts. How many flabies there are, Moving in the eyes like moonlight, No matter how many things there are, It is like ragini in the ears, Gulshan ki wo kali hai, All the flowers that are absolutely separated, Have you seen this somewhere, What did these eyes look like? What a strange refreshment, What a beautiful simplicity, What a strange heart, What a beautiful heart</p>
+                <p style="line-height: 1.8; font-size:medium">What is this jism- This is the garment of the soul. What is this pain- It's a quest for love. Fool me I want it. It was a kind of defeat.   What is your fiza- Heart-o-Jahan is devastated! What is your punishment? Betrayed Wafa! Wow, from life. Yun separated me! Where do I go and look?   Is it your consent? Heart-o-Jahan is devastated! What is your punishment? Betrayed Wafa! From life again Yun separated me! Where do I go and look?</p>
+
+            </div>
+            <div class="col-md-5 text-center p-3 ms-3 cardd">
+                <h1>Contact Us</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="inputEmail3" style="display: block; text-align: left;">Name</label>
+                        <input type="text" class="form-control styling" id="names" onkeyup="validate_names()" placeholder="Name">
+                        <span id="names_error" style="color: red;"></span>
+                    </div><br>
+                    <div class="form-group">
+                        <label for="inputEmail3" style="display: block; text-align: left;">Email</label>
+                        <input type="email" class="form-control styling" id="emails" onkeyup="validate_emails()" placeholder="Email">
+                        <span id="emails_error" style="color: red;"></span>
+                    </div><br>
+                    <div class="form-group">
+                        <label for="inputPassword3" style="display: block; text-align: left;">Contact Number</label>
+                        <input type="number" class="form-control styling" id="phones" onkeyup="validate_phones()" placeholder="Ph. No.">
+                        <span id="phones_error" style="color: red;"></span>
+                    </div><br>
+                    <div class="form-group">
+                        <label for="inputPassword3" style="display: block; text-align: left;">Message</label>
+                        <textarea class="form-control styling" id="messages" rows="3" onkeyup="validate_messages()" placeholder="Enter Message..."></textarea>
+                        <span id="messages_error" style="color: red;"></span>
+                    </div><br>
+                    <div class="form-group">
+                        <button type="submit" id="submits" onclick="validate_submits(event)" class="btn btn-primary buttstyle">Submit</button>
+                        <span id="submits_error" style="color: red;"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <i class="bi bi-github fs-5 me-3"></i>
+            <i class="bi bi-linkedin fs-5 me-3"></i>
+            <i class="bi bi-instagram fs-5 me-3"></i>
+            <i class="bi bi-facebook fs-5 me-3"></i>
+        </div>
+    </div>
+    <script src="static/js/navbar.js"></script>
+ </body>
+</html>
