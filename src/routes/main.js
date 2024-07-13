@@ -209,85 +209,99 @@ routes.post('/upload_image',jsonparser, upload.single('postImage'),async (req,re
     res.send({ success : upload_success });
 })
 
+
+// main.js
+
 routes.post('/like', jsonparser, async (req, res) => {
     let like_success = false;
+    const { postId, postUsername } = req.body;
 
     try {
         await client.connect();
+        const collection = client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION);
 
-        if (req.body.my_email) {
-            const filter = {
-                username: req.body.other_user,
-                post: req.body.other_post,
-                'likes.luid': req.body.my_email,
-            };
+        const post = await collection.findOne({ _id: new ObjectId(postId) });
 
-            const update = {
-                $set: {
-                    'likes.$.like': req.body.my_username,
-                },
-                $setOnInsert: { // If 'likes' array doesn't exist, create it
-                    'likes': [{
-                        luid: req.body.my_email,
-                        like: req.body.my_username,
-                    }],
-                },
-            };
+        if (post) {
+            const isLiked = post.likes.includes(req.session.username);
 
-            const options = {
-                upsert: true, // Create the document if it doesn't exist
-                returnDocument: 'after', // Return the updated document
-            };
+            let update;
+            if (isLiked) {
+                update = { $pull: { likes: req.session.username } };
+            } else {
+                update = { $addToSet: { likes: req.session.username } };
+            }
 
-            const item = await client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION).findOneAndUpdate(filter, update, options);
-
-            like_success = !!item.value; // Check if the document was found and updated
+            const result = await collection.updateOne({ _id: new ObjectId(postId) }, update);
+            like_success = result.modifiedCount > 0;
         }
     } catch (err) {
-        console.log("Error ", err);
+        console.error(err);
     } finally {
         await client.close();
     }
 
-    data = {
-        like_success: like_success,
-    };
-
-    res.send(data);
+    res.send({ like_success });
 });
 
-    
-routes.post('/comment', jsonparser, async (req,res)=>{
-    data = {
-        success:false,
-        postname:null,
-        postusername:null,
-        postcomments:null,
-        commented_username:null,
-        commented_text:null
-    }
-    try{
+
+
+routes.post('/comment', jsonparser, async (req, res) => {
+    let comment_success = false;
+    const { postId, commentText } = req.body;
+
+    try {
         await client.connect();
-        if(req.body.email){
-            const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({ email:req.body.email});
-            if(item.password === req.body.password){
-                data.success = true;
-                const status = await client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION).findOne({username:req.body.c_username,post:req.body.c_post});
-                data.postname=status.post;
-                data.postusername=status.username;
-                data.postcomments=status.comments;
-                data.commented_username=status.comments.username;
-                data.commented_text=status.comments.comment;
-            }
+        const collection = client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION);
+        const usersCollection = client.db(process.env.DB_NAME).collection(req.session.email);
+
+        const user = await usersCollection.findOne({ username: req.session.username }, { projection: { display_profile: 1 } });
+        if (!user) {
+            throw new Error('User not found');
         }
-    }
-    catch (e) {
-        console.error(e);
+
+        const comment = {
+            username: req.session.username,
+            text: commentText,
+            date: new Date(),
+            dp:user.display_profile
+        };
+
+        const result = await collection.updateOne(
+            { _id: new ObjectId(postId) },
+            { $push: { comments: comment } }
+        );
+
+        comment_success = result.modifiedCount > 0;
+    } catch (err) {
+        console.error(err);
     } finally {
         await client.close();
     }
-    res.send(data);
-})
+
+    res.send({ success: comment_success });
+});
+
+
+routes.get('/get-comments/:postId', async (req, res) => {
+    const postId = req.params.postId;
+    let response = { success: false, comments: [] };
+
+    try {
+        await client.connect();
+        const collection = client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION);
+        const post = await collection.findOne({ _id: new ObjectId(postId) }, { projection: { comments: 1, dp : 1 } });
+
+        if (post) {
+            response = { success: true, comments: post.comments, dp:post.dp };
+        }
+    } catch (err) {
+        console.error(err);
+    } finally {
+        await client.close();
+    }
+    res.send(response);
+});
 
 
 routes.get('/profile', async (req,res)=>{
