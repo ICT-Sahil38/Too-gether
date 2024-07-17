@@ -156,11 +156,20 @@ routes.get('/home',async (req,res)=>{
                 image=posts;
                 const posts_acc = await client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION).find({email:req.session.email}).toArray();
                 total_images = posts_acc.length;
+
+                const savedPosts = await client.db(process.env.DB_NAME).collection('saved_posts').find({ user_email: req.session.email }).toArray();
+                const savedPostIds = new Set(savedPosts.map(sp => sp.post_id.toString()));
+
                 for(const post of image){
                     post.liked = post.likes.includes(req.session.username);
-                    // console.log("post.liked ",post.liked);
-                    // console.log("post.liked ",post.liked);
+                    post.saved = savedPostIds.has(post._id.toString());
                 }
+                // for (const post of image) {
+                //     const savedMails = post.saved.map(savedItem => savedItem.mail);
+                //     post.saved = savedMails.includes(req.session.email);
+                //     console.log(post.saved);
+                // }
+                
 
             }
         }
@@ -184,8 +193,7 @@ routes.post('/upload_image',jsonparser, upload.single('postImage'),async (req,re
         email:req.session.email,
         username:req.session.username,
         post : req.file.filename,
-        comments:[{uid:"This is unique id",
-            comment:"This is first comment"}],
+        comments:[],
         likes:[],
         caption:"This is caption",
         dp:"initial_profile_image.png"
@@ -195,6 +203,10 @@ routes.post('/upload_image',jsonparser, upload.single('postImage'),async (req,re
         if(req.session.email){
             const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({email:req.session.email});
             if(item.password === req.session.password){
+                const dp = await client.db(process.env.DB_NAME).collection(req.session.email).findOne({email:req.session.email});
+                console.log(dp);
+                const display_profile = dp.display_profile;
+                upload_image.dp = display_profile;
                 const status = await client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION).insertOne(upload_image);
                 upload_success=true;
             }
@@ -243,6 +255,63 @@ routes.post('/like', jsonparser, async (req, res) => {
 
     res.send({ like_success });
 });
+
+
+routes.post('/save', async (req, res) => {
+    let save_success = false;
+    const postId = req.body;
+
+    try {
+        await client.connect();
+        const collection = client.db(process.env.DB_NAME).collection('saved_posts');
+
+        const saveDoc = {
+            user_email: req.session.email,
+            post_id: new ObjectId(postId)
+        };
+
+        const result = await collection.updateOne(
+            saveDoc,
+            { $setOnInsert: saveDoc },
+            { upsert: true }
+        );
+
+        save_success = result.upsertedCount > 0 || result.matchedCount > 0;
+    } catch (err) {
+        console.error(err);
+    } finally {
+        await client.close();
+    }
+
+    res.send({ save_success });
+});
+
+
+
+routes.post('/unsave', async (req, res) => {
+    let save_success = false;
+    const postId = req.body;
+
+    try {
+        await client.connect();
+        const collection = client.db(process.env.DB_NAME).collection('saved_posts');
+
+        const result = await collection.deleteOne({
+            user_email: req.session.email,
+            post_id: new ObjectId(postId)
+        });
+
+        save_success = result.deletedCount > 0;
+    } catch (err) {
+        console.error(err);
+    } finally {
+        await client.close();
+    }
+
+    res.send({ save_success });
+});
+
+
 
 
 

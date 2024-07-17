@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="static/css/navbar.css">
   <script src="static/js/addpost.js"></script>
   <script src="static/js/likes.js"></script>
+  <script src="static/js/saves.js"></script>
   <script src="static/js/comment.js"></script>
   <script src="static/js/commentmodel.js"></script>
  <!-- Include jQuery and Toastr CSS and JS -->
@@ -96,12 +97,13 @@
                               </div>
 
 
-                              
-
-                              <div class="p-2 me-3">
-                                 <i class="bi bi-bookmark" style="color: white;"></i>
+                              <div class="p-2 me-3 post-save-container" data-post-id="{{this._id}}">
+                                 <i class="bi {{#if this.saved}}bi-bookmark-fill{{else}}bi-bookmark{{/if}}" id="save_{{this._id}}" style="color: white;"></i>
                                  <a style="color: white;">Save</a>
                               </div>
+
+
+
                         </div>
                         <div style="text-align: left;">
                            <div>

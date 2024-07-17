@@ -41,6 +41,7 @@ $(document).ready(function () {
     $('.post-like-container').on('click', function () {
         const postId = $(this).data('post-id');
         const postUsername = $(this).data('post-username');
+        var audio = new Audio('static/audio/success.mp3');
 
         $.ajax({
             url: '/like',
@@ -51,8 +52,8 @@ $(document).ready(function () {
                 if (response.like_success) {
                     const likeIcon = $(`#like_${postId}`);
                     likeIcon.toggleClass('bi-heart bi-heart-fill');
-                    toastr.success('Post liked successfully!');
-                    setTimeout(() => window.location.reload(),2000);
+                    audio.play();
+                    setTimeout(() => window.location.reload(),1000);
                 } else {
                     toastr.error('Failed to like the post. Please try again.');
                     setTimeout(() => window.location.reload(),2000);
