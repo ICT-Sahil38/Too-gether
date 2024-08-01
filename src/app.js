@@ -5,6 +5,10 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const crypto = require('crypto');
 require("dotenv").config();
+const { MongoClient, ObjectId, Timestamp } = require('mongodb');
+const client = new MongoClient(process.env.URL);
+const app = express();
+const http = require('http').Server(app)
 
 hbs.registerHelper('contains', function (array, element) {
   return array.some((el) => el.luid === element);
@@ -25,7 +29,10 @@ hbs.registerHelper('eq', function (a, b, options) {
   }
 });
 
-const app = express();
+hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
+  return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
+
 app.use(session({
   secret: sessionSecret,
   resave: false,
@@ -51,6 +58,43 @@ app.set('view engine', 'hbs');
 app.set("views", "views");
 hbs.registerPartials("views/partials");
 
-app.listen(process.env.PORT || 4001, ()=>{
+const io = require("socket.io")(http);
+var usp = io.of('/too-gether');
+usp.on('connection',async function(socket) {
+  var my_online_status = socket.handshake.auth.token;
+  try {
+    await client.connect();
+    await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).updateOne(
+      { _id:new ObjectId(my_online_status) },
+      { $set: { is_online: '1' } }
+    );
+     await socket.broadcast.emit('getOnlineUser',{user_id:my_online_status});
+
+  } catch (error) {
+    console.error("Database Error:", error);
+  }
+  socket.on('disconnect',async function() {
+    var my_online_status = socket.handshake.auth.token;
+  try {
+    await client.connect();
+    await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).updateOne(
+      { _id:new ObjectId(my_online_status) },
+      { $set: { is_online: '0' } }
+    );
+    await socket.broadcast.emit('getOfflineUser',{user_id:my_online_status});
+
+  } catch (error) {
+    console.error("Database Error:", error);
+  }
+  });
+
+  socket.on('error', (err) => {
+    console.error("Socket Error:", err);
+  });
+});
+
+
+
+http.listen(process.env.PORT || 4001, ()=>{
     console.log(`Server Started At localhost:${process.env.PORT || 4001}`);
 });

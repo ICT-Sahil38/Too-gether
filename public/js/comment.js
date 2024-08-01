@@ -12,6 +12,7 @@ function addComment(postId, commentText) {
         success: function (response) {
             if (response.success) {
                 toastr.success('Comment added successfully!');
+                setTimeout(() => window.location.reload(),1000);
                 // Optionally, update the UI to show the new comment without refreshing the page
             } else {
                 toastr.error('Failed to add comment.');

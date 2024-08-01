@@ -58,7 +58,7 @@ function submit_profile(event){
             .then(data => {
                 if (data.success) {
                     toastr.success('Profile Updated successfully');
-                    setTimeout(() => window.location.reload(),2000);
+                    setTimeout(() => window.location.reload(),1000);
                 } else {
                     toastr.error('Failed to update profile');
                 }

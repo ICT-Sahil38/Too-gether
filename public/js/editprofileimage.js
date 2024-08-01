@@ -12,7 +12,7 @@ function editProfileImage_fun(event){
       .then(data => {
         if (data.success) {
           toastr.success('Image editted successfully');
-          setTimeout(() => window.location.reload(),2000);
+          setTimeout(() => window.location.reload(),1000);
         } else {
           toastr.error('Failed to edit image');
         }

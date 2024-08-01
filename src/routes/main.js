@@ -3,7 +3,7 @@ const app = express();
 const routes = express.Router();
 const bodyparser = require("body-parser");
 var jsonparser = bodyparser.json();
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient, ObjectId, Timestamp } = require('mongodb');
 const client = new MongoClient(process.env.URL);
 const fs = require('fs');
 const multer = require('multer');
@@ -101,6 +101,14 @@ routes.post('/registration_check',jsonparser,async (req,res)=>{
                     name:"This is my name",
                     occupation:"This is my occupation"
                 }
+                const chat_insert = {
+                    name:req.body.username,
+                    email:req.body.email,
+                    dp_image:"initial_profile_image.png",
+                    is_online:'0',
+                    lastModified: new Date()
+                }
+                chatUser = await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).insertOne(chat_insert);
                 const status = await client.db(process.env.DB_NAME).collection(req.body.email).insertOne(insert_profile);
                 if(status.acknowledged){
                     // console.log(item.acknowledged)
@@ -373,7 +381,7 @@ routes.get('/get-comments/:postId', async (req, res) => {
 });
 
 
-routes.get('/profile', async (req,res)=>{
+routes.get('/profile',async (req,res)=>{
     let profile_image = null;
     let posts = null;
     let profile_name = null;
@@ -445,6 +453,7 @@ routes.post('/edit_profile_image',jsonparser, upload.single('editProfileImage'),
             const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({email:req.session.email});
             if(item.password === req.session.password){
                 const filter = {email:req.session.email};
+                const filter1 = { 'comments.username': req.session.username };
                 const edit = {
                     $set : {
                         display_profile : req.file.filename
@@ -455,8 +464,20 @@ routes.post('/edit_profile_image',jsonparser, upload.single('editProfileImage'),
                         dp : req.file.filename
                     }
                 }
+                const edit3 = {
+                    $set : {
+                        dp_image : req.file.filename
+                    }
+                }
+                const edit4 = {
+                    $set : {
+                        'comments.$[].dp' : req.file.filename
+                    }
+                }
                 const status = await client.db(process.env.DB_NAME).collection(req.session.email).updateOne(filter,edit);
                 const status2 = await client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION).updateMany(filter,edit2);
+                const status3 = await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).updateOne(filter,edit3);
+                const status4 = await client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION).updateMany(filter1,edit4);
                 edit_success=true;
             }
         }
@@ -496,6 +517,27 @@ routes.post('/care_check',jsonparser,async(req,res)=>{
     }
 
     res.send({ success : success });
+})
+
+routes.get('/direct-message',async(req,res)=>{
+    var other_users = null;
+    var my_status = null;
+    try{
+        await client.connect();
+        if(req.session.email){
+            item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({ email: req.session.email});
+            if(req.session.password === item.password){
+                const status = await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).find({email:{$nin:[req.session.email]}}).toArray();
+                const myprofile = await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).findOne({email:req.session.email});
+                other_users = status;
+                my_status = myprofile;
+            }
+        }
+    }
+    catch(e){
+        console.log(e.message);
+    }
+    res.render('directmessage',{other_users:other_users, my_status:my_status});
 })
 
 

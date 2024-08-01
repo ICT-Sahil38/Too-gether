@@ -82,7 +82,7 @@ function validate_submits(event){
                 if (data.success) {
                     audio.play();
                     toastr.success('Submitted Successfully');
-                    setTimeout(() => window.location.reload(),2000);
+                    setTimeout(() => window.location.reload(),1000);
                 } else {
                     toastr.error('Failed to submit');
                 }

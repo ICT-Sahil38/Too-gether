@@ -45,7 +45,7 @@ function postImages(event){
       .then(data => {
         if (data.success) {
           toastr.success('Image uploaded successfully');
-          setTimeout(() => window.location.reload(),2000);
+          setTimeout(() => window.location.reload(),1000);
         } else {
           toastr.error('Failed to upload image');
         }

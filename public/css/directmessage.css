@@ -1,0 +1,46 @@
+:root{
+    --height_of_chats:630px;
+}
+.chatNames{
+    display: flex;
+    flex-direction: column;
+    height: calc(var(--height_of_chats) - 70px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.chatNamesHead{
+    height: var(--height_of_chats);
+}
+::-webkit-scrollbar {
+    display: none;
+}
+.chatsBody{
+    height: calc(var(--height_of_chats) - 100px);
+    overflow-x: hidden;
+    overflow-y: scroll;    
+}
+#chatsButton{
+    background-color: black;
+    color: white;
+    font-size: 20px;
+}
+.online-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.offline-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    border: 2px solid white;
+}  

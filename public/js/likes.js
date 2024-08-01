@@ -52,11 +52,14 @@ $(document).ready(function () {
                 if (response.like_success) {
                     const likeIcon = $(`#like_${postId}`);
                     likeIcon.toggleClass('bi-heart bi-heart-fill');
-                    audio.play();
+                    // console.log(document.getElementById(`like_${postId}`).classList);
+                    if(document.getElementById(`like_${postId}`).classList.contains('bi-heart-fill')){
+                        audio.play();
+                    }
                     setTimeout(() => window.location.reload(),1000);
                 } else {
                     toastr.error('Failed to like the post. Please try again.');
-                    setTimeout(() => window.location.reload(),2000);
+                    setTimeout(() => window.location.reload(),1000);
                 }
             },
             error: function () {
