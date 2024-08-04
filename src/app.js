@@ -61,7 +61,7 @@ hbs.registerPartials("views/partials");
 const io = require("socket.io")(http);
 var usp = io.of('/too-gether');
 usp.on('connection',async function(socket) {
-  var my_online_status = socket.handshake.auth.token;
+    var my_online_status = socket.handshake.auth.token;
   try {
     await client.connect();
     await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).updateOne(
@@ -75,18 +75,35 @@ usp.on('connection',async function(socket) {
   }
   socket.on('disconnect',async function() {
     var my_online_status = socket.handshake.auth.token;
-  try {
-    await client.connect();
-    await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).updateOne(
-      { _id:new ObjectId(my_online_status) },
-      { $set: { is_online: '0' } }
-    );
-    await socket.broadcast.emit('getOfflineUser',{user_id:my_online_status});
+    try {
+      await client.connect();
+      await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).updateOne(
+        { _id:new ObjectId(my_online_status) },
+        { $set: { is_online: '0' } }
+      );
+      await socket.broadcast.emit('getOfflineUser',{user_id:my_online_status});
 
-  } catch (error) {
-    console.error("Database Error:", error);
-  }
+    } catch (error) {
+      console.error("Database Error:", error);
+    }
   });
+
+  socket.on('newChat',function(data){
+    socket.broadcast.emit('loadNewChat',data);
+  })
+
+  //Load Old Chats
+  socket.on('existChat',async function(data){
+    try{
+      await client.connect();
+      var chats = await client.db(process.env.DB_NAME).collection(process.env.DM_COLLECTION).find({$or:[{sender_id:data.sender_id,receiver_id:data.receiver_id},
+        {sender_id:data.receiver_id,receiver_id:data.sender_id}
+      ]}).toArray();
+      await socket.emit('loadChats',{ chats: chats})
+    }catch(error){
+      console.log("This is eror",error.message);
+    }
+  })
 
   socket.on('error', (err) => {
     console.error("Socket Error:", err);

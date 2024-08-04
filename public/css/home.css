@@ -1,9 +1,9 @@
 body{
     background-color: black;
 }
-/* .profile,.post{
-    border: 2px solid green;
-} */
+.profile{
+    box-shadow: inset 0px 0px 5px 5px #000000;
+}
 .scroll{
     overflow-x: hidden;
     overflow-y: scroll;

@@ -38,13 +38,10 @@ routes.post('/login_check', jsonparser , async (req,res)=>{
         email:null,
         password:null
     }
-    // console.log("Hello World");
     try{
         await client.connect();
-        // console.log("Hello World");
         if(req.body.email){
             const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({ email : req.body.email });
-            // console.log("This is item ",item);
             if(req.body.password === item.password){
                 login_success = true;
                 success_data.username = item.user;
@@ -70,7 +67,6 @@ routes.post('/login_check', jsonparser , async (req,res)=>{
         password:success_data.password,
         username:success_data.username
     }
-    // console.log(data);
     res.send(data);
 })
 
@@ -88,7 +84,6 @@ routes.post('/registration_check',jsonparser,async (req,res)=>{
     try{
         await client.connect();
         if(req.body.username){
-            // console.log("User added ", req.body.username);
             const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).insertOne(register_user);
             if(item.acknowledged){
                 const insert_profile = {
@@ -111,7 +106,6 @@ routes.post('/registration_check',jsonparser,async (req,res)=>{
                 chatUser = await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).insertOne(chat_insert);
                 const status = await client.db(process.env.DB_NAME).collection(req.body.email).insertOne(insert_profile);
                 if(status.acknowledged){
-                    // console.log(item.acknowledged)
                     registration_success = item.acknowledged;
                     req.session.email = req.body.email;
                     req.session.username = req.body.username;
@@ -133,7 +127,6 @@ routes.post('/registration_check',jsonparser,async (req,res)=>{
         password: register_user.password,
         username: register_user.user
     };
-    // console.log(data);
     res.send(data);
 })
 
@@ -193,10 +186,6 @@ routes.get('/home',async (req,res)=>{
 
 routes.post('/upload_image',jsonparser, upload.single('postImage'),async (req,res)=>{
     let upload_success = false;
-    // console.log("This is upload ",upload.single('postimage'))
-    // console.log("This is req.body ",req.body)
-    // console.log("This is req.file ",req.file)
-    // console.log("This is req.file ",req.file.filename)
     const upload_image = {
         email:req.session.email,
         username:req.session.username,
@@ -212,7 +201,6 @@ routes.post('/upload_image',jsonparser, upload.single('postImage'),async (req,re
             const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({email:req.session.email});
             if(item.password === req.session.password){
                 const dp = await client.db(process.env.DB_NAME).collection(req.session.email).findOne({email:req.session.email});
-                console.log(dp);
                 const display_profile = dp.display_profile;
                 upload_image.dp = display_profile;
                 const status = await client.db(process.env.DB_NAME).collection(process.env.POST_COLLECTION).insertOne(upload_image);
@@ -396,7 +384,6 @@ routes.get('/profile',async (req,res)=>{
         const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({email:req.session.email});
         if(item.password === req.session.password){
             const status = await client.db(process.env.DB_NAME).collection(req.session.email).findOne({email:req.session.email});
-            // console.log("++++",status.display_profile);
             profile_image = status.display_profile;
             profile_name = status.username;
             followers = status.followers.length;
@@ -500,13 +487,11 @@ routes.post('/care_check',jsonparser,async(req,res)=>{
         message:req.body.messages,
         ogacc:req.session.email
     }
-    console.log(feedback);
     try{
         await client.connect();
         const item = await client.db(process.env.DB_NAME).collection(process.env.AUTH_COLLECTION).findOne({email:req.session.email});
         if(item.password === req.session.password){
             const update = await client.db(process.env.DB_NAME).collection(process.env.CONTACT_COLLECTION).insertOne(feedback);
-            console.log(update);
             success = true;
         }
     }
@@ -540,6 +525,34 @@ routes.get('/direct-message',async(req,res)=>{
     res.render('directmessage',{other_users:other_users, my_status:my_status});
 })
 
+routes.post('/savechat',jsonparser, async (req, res) => {
+    var chat = {
+        sender_id: req.body.sender_id,
+        receiver_id: req.body.receiver_id,
+        message: req.body.message,
+        lastModified: new Date()
+    };
+    try {
+        await client.connect();
+        const status = await client.db(process.env.DB_NAME).collection(process.env.DM_COLLECTION).insertOne(chat);
+        res.status(200).send({ success: true, msg: "Chat save success", data: chat});
+    } catch (error) {
+        res.status(400).send({ success: false, msg: error.message });
+    }
+});
+
+routes.post('/getName',jsonparser, async (req, res) => {
+    var chat = {
+        sender_id: req.body.userId,
+    };
+    try {
+        await client.connect();
+        const getName = await client.db(process.env.DB_NAME).collection(process.env.CHAT_COLLECTION).findOne({_id: new ObjectId(chat.sender_id)});
+        res.status(200).send({ success: true, msg: "Chat save success", chatName: getName});
+    } catch (error) {
+        res.status(400).send({ success: false, msg: error.message });
+    }
+});
 
 routes.post('/logout', jsonparser, async (req,res)=>{
     let logout_success = false;

@@ -31,12 +31,12 @@
     {{> navbar}}
     <a class="my_profile" data-profile-id="{{my_status._id}}"></a>
     <div class="container-fluid row mt-4 justify-content-center">
-      <div class="col-md-3 ms-3 text-center chatNamesHead" style="border: 2px solid white; color:white;">
+      <div class="col-md-3 ms-3 text-center chatNamesHead" style="color:white;">
         <h3>Chats</h3>
-        <div class="chatNames" style="border: 2px solid white; color:white;">
+        <div class="chatNames" style=" color:white;">
           <ul style="list-style-type: none; padding: 0;">
             {{#each other_users}}
-            <li class="userList" style="border-bottom: 1px solid #ccc; padding: 10px 0;" data-post-id="{{this._id}}">
+            <li class="userList" style="border-bottom: 1px solid #484848; padding: 10px 0;" data-post-id="{{this._id}}">
               <div style="position: relative; display: inline-block;">
                 <img src="/static/img/{{this.dp_image}}" style="border-radius: 50%; width: 30px; height: 30px; border:1px solid white" alt="{{this.name}}">
                 {{#ifEquals this.is_online '1'}}
@@ -60,21 +60,22 @@
       </div>
 
 
-      <div class="col-md-8 ms-3 chatBody" style="border: 2px solid white; color:white; display:none">
-        <h3>Sahil</h3>
-        <div class="chatsBody" style="border: 2px solid white; color:white;">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem voluptatem quae, dolore suscipit minima porro molestias ipsa maiores neque sint quam laborum error qui eos. Fugit nostrum iste a officia in adipisci itaque, voluptatibus deserunt, recusandae illo aliquam officiis doloremque quae mollitia dolores dignissimos laboriosam placeat amet corporis, molestias ex cum quam sunt magnam. Nam dolorem culpa doloribus, atque molestias corrupti, doloremque fugiat amet voluptas nihil aliquam libero debitis quia recusandae excepturi cum optio dolorum blanditiis dolore alias sint officia consequuntur asperiores cupiditate! Veniam earum sed optio maxime commodi corrupti in dicta, omnis nemo! Eligendi quae blanditiis error omnis pariatur quos in rerum magnam rem repellendus iste sunt reiciendis tempora, optio ratione? Optio minus omnis a consequuntur, maiores ab. Similique corporis sit animi reprehenderit adipisci aliquid tenetur est cupiditate obcaecati recusandae fugit molestias mollitia excepturi, molestiae iure aut repellendus qui nisi ut libero? Dicta sint sapiente inventore nobis laboriosam molestias doloribus est necessitatibus totam impedit, aut blanditiis a autem ducimus explicabo commodi sunt ipsa tempore et! Accusamus quod earum error sint officiis! Dolorem incidunt voluptas, sapiente ea ipsam autem, ipsum quis, impedit facilis fugit quisquam soluta doloremque labore obcaecati tempore? Excepturi officiis commodi officia quibusdam minus corporis totam, doloremque magni enim rerum quia? Quos ipsam impedit molestiae est quia corrupti aliquid, pariatur quo fugit ratione quibusdam culpa maxime distinctio nihil vel odit alias illum libero expedita voluptatum iste quae odio consequuntur. Maxime voluptates at dolore omnis nam cumque odit assumenda cum velit quos nemo fuga sequi delectus esse laudantium illum itaque deleniti inventore quod non neque, repellat corrupti officiis quia? Corporis in odit sapiente assumenda magni dolor, nemo consectetur doloremque repellat voluptatum, inventore, vitae itaque quasi dignissimos voluptate at natus. Pariatur veritatis quaerat perspiciatis, neque nam vitae iste maxime at ipsum eligendi exercitationem cupiditate asperiores quam repellendus consequuntur in aut libero voluptatibus ut laborum repudiandae voluptas aliquam. Voluptas cum quia neque veritatis ratione, minus eum nemo explicabo soluta impedit ut est tenetur! Non soluta velit ex rem, veniam laudantium nihil voluptatum illo, autem libero nemo nam, inventore repudiandae ipsum est aperiam odio veritatis! Quia libero porro labore sint, minus doloremque nemo! Tempora tempore atque ullam possimus, velit iusto consequuntur quod ducimus laborum dolor labore quisquam dicta necessitatibus voluptatum, totam accusamus, et repudiandae in repellendus nisi non. Laboriosam numquam corrupti aspernatur accusamus nam quam ab quasi quisquam ullam expedita molestiae nisi, aut, assumenda inventore unde ducimus a? Iste velit dolorum doloremque totam, saepe voluptate nostrum laboriosam ea delectus voluptatum hic iure, aliquam dolorem sunt repudiandae maxime eligendi, ipsum blanditiis similique fugiat culpa. Totam, similique veniam? Eum delectus suscipit, illo sit vitae reprehenderit corrupti blanditiis natus inventore officia sequi eligendi quos ex alias voluptas enim voluptatum dolore adipisci ut impedit consequuntur accusamus id iure! Accusamus, porro dolores quae natus optio nam blanditiis. Consequatur incidunt voluptatibus deleniti laboriosam rerum. Perferendis, eveniet inventore. Doloribus illum, doloremque quis enim accusantium repellendus voluptates, eveniet mollitia voluptatibus exercitationem quae magnam maxime odio ea tempora nisi culpa fuga? Voluptate, voluptatum. Amet veritatis, eum id obcaecati praesentium harum accusantium.
+      <div class="col-md-8 ms-3 chatBody">
+        <div class="d-flex chatName">
+          
         </div>
-        <div class="d-flex mt-2">
-          <input type="text" placeholder="Enter Message..." class="form-control" style="width: 2500px;">
-          <button type="button" class="btn btn-primary ms-2">Send</button>
+        <div class="chatsBody">
+
         </div>
+        <form class="d-flex mt-2 chat-form">
+          <input type="text" placeholder="Enter Message..." class="form-control message" style="width: 2500px;">
+          <button type="submit" class="btn btn-primary ms-2">Send</button>
+        </form>
       </div>
 
 
     </div>
 <script src="static/js/navbar.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
